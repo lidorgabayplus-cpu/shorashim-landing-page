@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>שורשים — קהילת הצמיחה לתלמידים</title>
+  <meta name="description" content="שורשים היא קהילה לתלמידים בכיתות ז׳–י״ב שמפתחת ביטחון עצמי, אחריות והתמדה. קבעו שיחת היכרות ללא עלות." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Assistant:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <style>
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DESIGN TOKENS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --g-dark:  #1e5230;
+  --g-deep:  #0e1f12;
+  --g-ink:   #0a1710;
+  --g-mid:   #2d8a54;
+  --g-light: #e7f3ec;
+  --g-muted: #bdd8c8;
+  --accent:  #e8c87d;
+  --cta:     #4bab6e;
+  --cta-h:   #3d9460;
+  --t1:      #1a2e1a;
+  --t2:      #3a5a42;
+  --t3:      #6a8a72;
+  --bg:      #ffffff;
+  --bg-w:    #fafcf8;
+  --bg-a:    #f4f9f6;
+  --ease:    cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:cubic-bezier(0, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Assistant', 'Heebo', sans-serif;
+  background: var(--bg); color: var(--t1);
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Editorial heading font — Heebo for punch and impact */
+h1, h2, h3, h4,
+.s__title, .hero__headline, .about__name,
+.journey__title, .journey__num, .journey__closing__l1, .journey__closing__l2,
+.form-card__h, .f-success__h, .metric__val {
+  font-family: 'Heebo', sans-serif;
+}
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+
+.container {
+  width: 100%; max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   INTRO OVERLAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#intro-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: #060d08;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+#intro-overlay.skip { display: none; }
+
+#intro-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; opacity: 0;
+}
+
+.intro-glow {
+  position: absolute;
+  width: min(720px, 90vw); height: min(720px, 90vw);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,138,84,0.14) 0%, rgba(45,138,84,0.06) 40%, transparent 70%);
+  opacity: 0; pointer-events: none; will-change: transform, opacity;
+}
+
+.intro-content {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+
+.intro-shorshi-wrap {
+  position: relative; display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; will-change: opacity, transform;
+}
+.intro-shorshi-wrap img {
+  width: clamp(120px, 28vw, 200px); height: auto;
+  filter: drop-shadow(0 16px 40px rgba(45,138,84,0.3)) drop-shadow(0 0 60px rgba(45,138,84,0.12));
+}
+
+.intro-leaf-glow {
+  position: absolute; top: 0; left: 50%;
+  transform: translate(-50%, -60%);
+  width: 56px; height: 56px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(110,220,110,0.9) 0%, rgba(80,190,80,0.5) 30%, transparent 70%);
+  filter: blur(10px); opacity: 0; will-change: opacity;
+}
+
+.intro-logo-card {
+  opacity: 0; will-change: opacity, transform;
+  display: flex; align-items: center; justify-content: center;
+}
+.intro-logo-card img {
+  width: clamp(140px, 36vw, 220px); height: auto;
+  border-radius: 16px;
+  box-shadow: 0 0 80px rgba(255,255,255,0.12), 0 0 40px rgba(45,138,84,0.16), 0 24px 48px rgba(0,0,0,0.36);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   NAV
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.nav {
+  position: fixed; top: 0; inset-inline: 0; z-index: 100;
+  transition: background 400ms, backdrop-filter 400ms;
+}
+.nav.scrolled {
+  background: rgba(10,23,14,0.96);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 62px; max-width: 1100px;
+  margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px);
+}
+.nav__logo img { height: 40px; width: auto; opacity: 0.92; transition: opacity 200ms; }
+.nav__logo:hover img { opacity: 1; }
+
+.btn-nav {
+  display: inline-flex; align-items: center;
+  background: var(--cta); color: #fff;
+  font-size: 14px; font-weight: 700;
+  padding: 10px 24px; border-radius: 50px;
+  transition: background 200ms, transform 200ms; white-space: nowrap;
+}
+.btn-nav:hover { background: var(--cta-h); transform: translateY(-1px); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HERO — CINEMATIC VIDEO + 3D SHORSHI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.hero {
+  position: relative; min-height: 100svh;
+  display: flex; align-items: center;
+  overflow: hidden; padding-top: 62px;
+}
+.hero__video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center; z-index: 0;
+}
+.hero__overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(175deg, rgba(6,15,9,0.84) 0%, rgba(12,36,20,0.68) 40%, rgba(6,15,9,0.80) 100%),
+    linear-gradient(90deg, rgba(6,15,9,0.52) 0%, transparent 60%);
+}
+.hero__overlay::after {
+  content: ''; position: absolute; inset: 0; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px;
+}
+
+/* Bottom bleed — fade into §2 bg color */
+.hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 220px; z-index: 2;
+  background: linear-gradient(to bottom, transparent 0%, rgba(244,249,246,0.6) 70%, var(--bg-a) 100%);
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative; z-index: 3;
+  width: 100%; max-width: 1100px; margin: 0 auto;
+  padding: clamp(60px, 10vh, 100px) clamp(20px, 5vw, 48px);
+  display: grid; grid-template-columns: 1fr;
+  gap: 40px; align-items: center;
+}
+@media (min-width: 720px) { .hero__inner { grid-template-columns: 1fr auto; gap: 32px; } }
+
+.hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--accent);
+  opacity: 0.7; margin-bottom: 16px;
+}
+.hero__eyebrow::before {
+  content: ''; display: inline-block; width: 22px; height: 1.5px;
+  background: var(--accent); opacity: 0.6;
+}
+
+.hero__headline {
+  font-size: clamp(36px, 8.5vw, 78px);
+  font-weight: 900; line-height: 1.08;
+  letter-spacing: -0.03em; color: #f2f9f4;
+}
+.hero__headline .hl-line {
+  display: block;
+}
+@media (min-width: 400px) {
+  .hero__headline .hl-line { white-space: nowrap; }
+}
+.hero__headline mark { background: none; color: var(--accent); }
+
+.hero__sub {
+  font-size: clamp(16px, 2vw, 20px);
+  color: rgba(242,249,244,0.88); line-height: 1.82;
+  max-width: 460px; margin-top: 22px; font-weight: 400;
+}
+
+.hero__actions { margin-top: 38px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--cta); color: #fff;
+  font-family: inherit;
+  font-size: clamp(15px, 1.7vw, 17px); font-weight: 800;
+  padding: clamp(14px, 1.8vh, 17px) clamp(28px, 3.5vw, 44px);
+  border-radius: 50px; border: none; cursor: pointer;
+  box-shadow: 0 6px 28px rgba(75,171,110,0.35);
+  transition: background 220ms, transform 220ms, box-shadow 220ms;
+  letter-spacing: 0.01em;
+}
+.btn-primary:hover { background: var(--cta-h); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(75,171,110,0.46); }
+.hero__note { font-size: 12px; color: rgba(242,249,244,0.60); margin-top: 10px; letter-spacing: 0.04em; }
+
+/* Shorshi stage */
+.hero__shorshi-stage {
+  display: flex; align-items: flex-end; justify-content: center;
+  position: relative;
+}
+model-viewer#hero-shorshi {
+  width: clamp(160px, 28vw, 280px); height: clamp(220px, 36vw, 360px);
+  background: transparent;
+  --progress-bar-height: 0px; --progress-bar-color: transparent;
+}
+.hero__shorshi-png img {
+  width: clamp(160px, 28vw, 280px); height: auto;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.38));
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ORGANIC SECTION DIVIDERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.s-divider {
+  display: block; line-height: 0;
+  overflow: hidden; height: 72px;
+  position: relative; z-index: 4;
+}
+.s-divider svg { width: 100%; height: 100%; display: block; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SHARED SECTION STYLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.s { padding: clamp(64px, 10vh, 108px) 0; }
+.s--alt  { background: var(--bg-a); }
+.s--warm { background: var(--bg-w); }
+.s--ink  { background: var(--g-ink); }
+.s--dark { background: var(--g-dark); }
+
+.s__eyebrow {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--g-mid);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.s__eyebrow::before { content: ''; width: 20px; height: 1.5px; background: var(--g-mid); }
+.s--ink .s__eyebrow, .s--dark .s__eyebrow { color: rgba(232,200,125,0.85); }
+.s--ink .s__eyebrow::before, .s--dark .s__eyebrow::before { background: rgba(232,200,125,0.7); }
+.report-section .s__eyebrow { color: rgba(232,200,125,0.85); }
+.report-section .s__eyebrow::before { background: rgba(232,200,125,0.7); }
+
+.s__title {
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 900; line-height: 1.08; color: var(--t1);
+  letter-spacing: -0.025em;
+}
+.s--ink .s__title, .s--dark .s__title,
+.report-section .s__title { color: #f2f9f4; }
+
+.s__sub {
+  font-size: clamp(15px, 1.8vw, 18px);
+  color: var(--t2); line-height: 1.9;
+  max-width: 560px; margin-top: 16px; font-weight: 300;
+}
+.s--ink .s__sub, .s--dark .s__sub,
+.report-section .s__sub { color: rgba(242,249,244,0.82); font-weight: 400; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   §2 PARENT IDENTIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.id-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin: 32px 0 28px;
+}
+@media (min-width: 620px) { .id-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.id-card {
+  background: var(--bg);
+  border: 1.5px solid var(--g-light);
+  border-radius: 14px; padding: 18px 20px;
+  font-size: clamp(13px, 1.4vw, 15px);
+  font-weight: 500; color: var(--t1); line-height: 1.6;
+  position: relative;
+  transition: border-color 250ms, box-shadow 250ms, transform 250ms;
+}
+.id-card::before {
+  content: ''; position: absolute; top: 14px; right: 16px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--g-muted); transition: background 250ms;
+}
+.id-card:hover { border-color: var(--cta); box-shadow: 0 4px 20px rgba(45,138,84,0.1); transform: translateY(-2px); }
+.id-card:hover::before { background: var(--cta); }
+
+.id-close {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 700; color: var(--g-dark);
+  border-top: 1.5px solid var(--g-light);
+  padding-top: 26px; line-height: 1.65; max-width: 600px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   §3 JOURNEY TIMELINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.journey__wrap {
+  margin-top: 52px;
+  position: relative;
+}
+
+/* Subtle SVG background — roots/branches motif */
+.journey__bg {
+  position: absolute; inset: 0;
+  pointer-events: none; overflow: hidden;
+  z-index: 0;
+}
+.journey__bg svg {
+  position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 900px;
+  opacity: 0.035;
+}
+.journey__inner { position: relative; z-index: 1; }
+
+/* Wave connector row — desktop only */
+.journey__connector-row {
+  display: none;
+  width: 100%; height: 54px;
+  pointer-events: none; direction: ltr;
+  margin-bottom: -27px;
+  position: relative; z-index: 2;
+}
+@media (min-width: 1024px) { .journey__connector-row { display: block; } }
+.journey__connector-row svg {
+  width: 100%; height: 100%; overflow: visible;
+}
+
+/* SVG path draw animation */
+.jpath {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1);
+}
+.journey__connector-row.path-drawn .jpath {
+  stroke-dashoffset: 0;
+}
+
+/* Stops container */
+.journey__stops {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Mobile — vertical connector line */
+@media (max-width: 639px) {
+  .journey__stops::before {
+    content: '';
+    position: absolute; right: 33px;
+    top: 60px; bottom: 60px;
+    width: 1.5px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(45,138,84,0.35) 8%,
+      rgba(45,138,84,0.35) 92%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+}
+
+/* Tablet — 3+2 grid */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .journey__stops {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+  }
+  .journey__stop:nth-child(1) { grid-column: 1 / 3; }
+  .journey__stop:nth-child(2) { grid-column: 3 / 5; }
+  .journey__stop:nth-child(3) { grid-column: 5 / 7; }
+  .journey__stop:nth-child(4) { grid-column: 2 / 4; }
+  .journey__stop:nth-child(5) { grid-column: 4 / 6; }
+}
+
+/* Desktop — 5 columns, LTR flow */
+@media (min-width: 1024px) {
+  .journey__stops {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    direction: ltr;
+  }
+}
+
+/* Card base */
+.journey__stop {
+  background: #fff;
+  border: 1.5px solid rgba(189,216,200,0.75);
+  border-radius: 18px;
+  padding: 22px 20px;
+  padding-right: 64px;
+  position: relative;
+  margin-bottom: 14px;
+  transition: border-color 300ms, box-shadow 300ms, transform 300ms;
+}
+.journey__stop:last-child { margin-bottom: 0; }
+.journey__stop:hover {
+  border-color: rgba(45,138,84,0.32);
+  box-shadow: 0 10px 36px rgba(30,82,48,0.1);
+  transform: translateY(-3px);
+}
+@media (min-width: 640px) {
+  .journey__stop {
+    padding-right: 20px;
+    padding-top: 58px;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .journey__stop { direction: rtl; padding-top: 60px; }
+}
+
+/* Station 05 — destination card */
+.journey__stop--goal {
+  border-color: rgba(45,138,84,0.35);
+  box-shadow: 0 10px 48px rgba(30,82,48,0.14), 0 0 0 1.5px rgba(45,138,84,0.14);
+  background: linear-gradient(155deg, #fff 55%, rgba(231,243,236,0.7) 100%);
+}
+.journey__stop--goal:hover {
+  box-shadow: 0 18px 60px rgba(30,82,48,0.2), 0 0 0 2px rgba(45,138,84,0.22);
+  transform: translateY(-5px);
+}
+@media (min-width: 640px) {
+  .journey__stop--goal { padding-top: 64px; }
+}
+@media (min-width: 1024px) {
+  .journey__stop--goal { padding-top: 68px; }
+}
+
+/* Number badge */
+.journey__num {
+  position: absolute;
+  font-size: 11px; font-weight: 900; letter-spacing: 0.06em;
+  color: #fff; background: var(--g-dark);
+  border: 2.5px solid #fff;
+  box-shadow: 0 0 0 1.5px rgba(45,138,84,0.3), 0 4px 12px rgba(14,47,28,0.2);
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  right: 16px; top: 16px;
+  z-index: 2;
+}
+@media (min-width: 640px) {
+  .journey__num { right: 50%; top: 9px; transform: translateX(50%); }
+}
+@media (min-width: 1024px) {
+  .journey__num { left: 50%; right: auto; transform: translateX(-50%); top: 9px; }
+}
+
+/* Goal station badge — glow */
+.journey__stop--goal .journey__num {
+  width: 48px; height: 48px;
+  font-size: 13px;
+  background: var(--g-mid);
+  box-shadow:
+    0 0 0 3px rgba(45,138,84,0.18),
+    0 0 18px rgba(45,138,84,0.28),
+    0 6px 20px rgba(14,47,28,0.28);
+}
+@media (min-width: 640px) {
+  .journey__stop--goal .journey__num { top: 7px; }
+}
+
+/* Stem: number badge → card top */
+@media (min-width: 640px) {
+  .journey__stop::after {
+    content: '';
+    position: absolute;
+    top: calc(9px + 40px + 3px);
+    left: 50%; transform: translateX(-50%);
+    width: 1.5px; height: 16px;
+    background: linear-gradient(to bottom, rgba(45,138,84,0.4), transparent);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .journey__stop--goal::after {
+    top: calc(7px + 48px + 3px);
+    height: 17px;
+    background: linear-gradient(to bottom, rgba(45,138,84,0.6), transparent);
+  }
+}
+
+/* Titles */
+.journey__title {
+  font-size: clamp(15px, 1.5vw, 17px);
+  font-weight: 800;
+  color: var(--g-deep);
+  margin-bottom: 7px;
+  line-height: 1.25;
+}
+.journey__stop--goal .journey__title {
+  font-size: clamp(15.5px, 1.6vw, 18px);
+  color: var(--g-ink);
+}
+
+/* Intro sentence */
+.journey__intro {
+  font-size: clamp(13px, 1.3vw, 14px);
+  font-weight: 700;
+  color: var(--g-dark);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.journey__stop--goal .journey__intro {
+  color: var(--g-mid);
+}
+
+/* Points */
+.journey__points {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.journey__points li {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t2);
+  line-height: 1.55;
+  padding-right: 16px;
+  position: relative;
+}
+.journey__points li::before {
+  content: ''; position: absolute;
+  right: 0; top: 7px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--g-mid); opacity: 0.7;
+}
+.journey__stop--goal .journey__points li {
+  color: var(--t1);
+}
+.journey__stop--goal .journey__points li::before {
+  opacity: 1;
+}
+
+/* Accent stripe on goal card + highlight text */
+.journey__stop--goal::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(270deg, transparent 0%, var(--g-mid) 40%, var(--cta) 100%);
+  border-radius: 18px 18px 0 0;
+  opacity: 0.65;
+}
+.journey__goal-mark {
+  color: var(--g-dark);
+  font-weight: 900;
+  position: relative;
+  display: inline;
+}
+.journey__goal-mark::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; right: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(270deg, var(--g-mid), var(--cta));
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+/* Emotional break */
+.journey__breath {
+  padding: clamp(48px, 8vw, 96px) clamp(20px, 6vw, 80px);
+  text-align: center;
+  position: relative;
+}
+.journey__breath::before {
+  content: '';
+  display: block;
+  width: 1px; height: clamp(32px, 5vw, 56px);
+  background: linear-gradient(to bottom, transparent, rgba(45,138,84,0.3));
+  margin: 0 auto 0 auto;
+  margin-bottom: clamp(24px, 4vw, 44px);
+}
+.journey__breath::after {
+  content: '';
+  display: block;
+  width: 1px; height: clamp(32px, 5vw, 56px);
+  background: linear-gradient(to bottom, rgba(45,138,84,0.3), transparent);
+  margin: clamp(24px, 4vw, 44px) auto 0 auto;
+}
+.journey__breath__text {
+  font-family: 'Heebo', sans-serif;
+  font-size: clamp(20px, 3.5vw, 36px);
+  font-weight: 600;
+  color: var(--t2);
+  line-height: 1.7;
+  letter-spacing: -0.018em;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.journey__breath__text em {
+  font-style: normal;
+  color: var(--g-dark);
+  font-weight: 900;
+}
+
+/* Benefits — 4 groups, compact */
+.journey__benefits {
+  margin-top: 40px;
+  padding: clamp(22px, 3vw, 36px) clamp(20px, 3vw, 36px);
+  background: var(--bg-a);
+  border-radius: 20px;
+  border: 1.5px solid rgba(189,216,200,0.65);
+}
+.journey__benefits__label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--g-mid); text-align: center;
+  margin-bottom: 22px;
+}
+.journey__benefits__groups {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 540px) {
+  .journey__benefits__groups { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .journey__benefits__groups { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+}
+.journey__bgroup {
+  background: #fff;
+  border: 1px solid rgba(189,216,200,0.55);
+  border-radius: 14px;
+  padding: 16px 18px;
+  transition: box-shadow 220ms, border-color 220ms;
+}
+.journey__bgroup:hover {
+  border-color: rgba(45,138,84,0.28);
+  box-shadow: 0 4px 16px rgba(45,138,84,0.08);
+}
+.journey__bgroup__name {
+  font-size: 10px; font-weight: 800;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--g-mid); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.journey__bgroup__name::before {
+  content: '';
+  width: 12px; height: 1.5px;
+  background: var(--g-mid);
+  flex-shrink: 0;
+}
+.journey__bgroup__items {
+  display: flex; flex-direction: column; gap: 5px;
+}
+.journey__bgroup__item {
+  font-size: 13px; font-weight: 600;
+  color: var(--t1); line-height: 1.45;
+  padding-right: 13px; position: relative;
+}
+.journey__bgroup__item::before {
+  content: '';
+  position: absolute; right: 0; top: 6px;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--g-mid); opacity: 0.6;
+}
+
+/* Closing statement — peak of the section */
+.journey__closing {
+  margin-top: 56px;
+  text-align: center;
+  padding: clamp(40px, 7vw, 84px) 0 clamp(20px, 4vw, 40px);
+}
+.journey__closing__l1 {
+  font-size: clamp(15px, 2vw, 22px);
+  font-weight: 400;
+  color: var(--t3);
+  line-height: 1.8;
+  letter-spacing: -0.005em;
+  margin-bottom: 10px;
+}
+.journey__closing__l2 {
+  font-size: clamp(28px, 5vw, 58px);
+  font-weight: 900;
+  color: var(--t1);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.journey__closing__l2 mark {
+  background: none;
+  color: var(--g-dark);
+  position: relative;
+  display: inline;
+}
+.journey__closing__l2 mark::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; right: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(270deg, var(--g-mid), var(--cta));
+  border-radius: 2px;
+  opacity: 0.75;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   §4 PARENT REPORT — VIDEO BACKGROUND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.report-section {
+  background: var(--g-ink); position: relative; overflow: hidden;
+}
+
+/* Background video */
+.report__video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  z-index: 0; opacity: 0.42;
+}
+
+/* Dark overlay — text readable, video still visible */
+.report__video-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(165deg, rgba(6,15,9,0.80) 0%, rgba(10,23,14,0.72) 50%, rgba(6,15,9,0.82) 100%);
+}
+
+/* Residual glow orbs for depth — z-index 1 so they sit above overlay */
+.report-section::before {
+  content: ''; position: absolute;
+  top: 5%; right: -8%; width: 52%; height: 90%;
+  background: radial-gradient(ellipse, rgba(45,138,84,0.09) 0%, transparent 68%);
+  pointer-events: none; z-index: 2;
+}
+.report-section::after {
+  content: ''; position: absolute;
+  bottom: -10%; left: -5%; width: 38%; height: 60%;
+  background: radial-gradient(ellipse, rgba(232,200,125,0.04) 0%, transparent 70%);
+  pointer-events: none; z-index: 2;
+}
+
+.report__layout {
+  position: relative; z-index: 3;
+  display: grid; grid-template-columns: 1fr;
+  gap: 48px; align-items: center;
+  padding: clamp(64px, 10vh, 108px) 0;
+}
+@media (min-width: 800px) { .report__layout { grid-template-columns: 1.25fr 0.75fr; gap: 64px; } }
+
+.report__stage {
+  position: relative; display: flex; align-items: center; justify-content: center;
+}
+.report__glow {
+  position: absolute; width: 72%; height: 72%; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(45,138,84,0.22) 0%, transparent 70%);
+  filter: blur(40px); z-index: 0;
+  animation: glowPulse 5s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.report__mockup {
+  position: relative; z-index: 1; width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 60px 120px rgba(0,0,0,0.6), 0 20px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06);
+  animation: floatMockup 5.5s ease-in-out infinite;
+}
+@keyframes floatMockup {
+  0%, 100% { transform: translateY(0) rotate(-0.5deg); }
+  50% { transform: translateY(-16px) rotate(0.3deg); }
+}
+
+.report__copy { display: flex; flex-direction: column; gap: 0; }
+.report__copy .s__title { max-width: 340px; }
+.report__copy .s__sub { max-width: 340px; margin-bottom: 28px; }
+
+.report__metrics {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 24px;
+}
+@media (min-width: 440px) { .report__metrics { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 800px) { .report__metrics { grid-template-columns: repeat(3, 1fr); } }
+
+.metric {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 12px 8px; text-align: center;
+  backdrop-filter: blur(4px);
+  transition: background 300ms, border-color 300ms;
+}
+.metric:hover { background: rgba(255,255,255,0.08); border-color: rgba(75,171,110,0.3); }
+.metric__val { font-size: clamp(18px, 2.5vw, 24px); font-weight: 900; color: var(--accent); line-height: 1; }
+.metric__lbl { font-size: 10px; font-weight: 600; color: rgba(242,249,244,0.72); margin-top: 5px; line-height: 1.3; }
+.metric__arrow { font-size: 11px; color: var(--cta); margin-top: 3px; font-weight: 700; }
+
+.report__note {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px; padding: 14px 16px;
+  border-right: 3px solid rgba(75,171,110,0.4);
+}
+.report__note img { width: 48px; flex-shrink: 0; }
+.report__note p { font-size: 13px; color: rgba(242,249,244,0.80); font-style: italic; line-height: 1.65; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   §5 TESTIMONIALS — PREMIUM CAROUSEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.recs-wrap { margin-top: 44px; position: relative; }
+
+/* Scroll-snap carousel — partial cards on sides naturally visible */
+.recs-carousel {
+  display: flex; gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 16px clamp(20px, 5vw, 48px) 28px;
+  margin: 0 -clamp(20px, 5vw, 48px);
+  cursor: grab;
+  direction: ltr; /* normalize scroll math — images only, no RTL content */
+  /* Fade edges for depth */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+.recs-carousel:active { cursor: grabbing; }
+.recs-carousel::-webkit-scrollbar { display: none; }
+
+.recs-slide {
+  flex: 0 0 min(82vw, 246px);
+  scroll-snap-align: center;
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.16);
+  transition: transform 320ms ease, box-shadow 320ms ease;
+  flex-shrink: 0; position: relative;
+}
+.recs-slide:hover { transform: scale(1.025); box-shadow: 0 16px 44px rgba(0,0,0,0.24); }
+.recs-slide img { width: 100%; height: auto; display: block; }
+
+@media (min-width: 560px) { .recs-slide { flex: 0 0 min(46vw, 250px); } }
+@media (min-width: 900px) { .recs-slide { flex: 0 0 min(29vw, 260px); } }
+
+/* Navigation row */
+.recs-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; margin-top: 18px;
+}
+.recs-nav-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--bg); border: 1.5px solid var(--g-light);
+  cursor: pointer; color: var(--t2);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 200ms, border-color 200ms, color 200ms;
+  font-size: 18px; line-height: 1;
+  font-family: inherit;
+}
+.recs-nav-btn:hover { background: var(--g-light); border-color: var(--cta); color: var(--cta); }
+
+.recs-dots { display: flex; gap: 8px; align-items: center; }
+.recs-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--g-muted); border: none; cursor: pointer;
+  transition: background 200ms, transform 200ms; padding: 0;
+}
+.recs-dot.active { background: var(--cta); transform: scale(1.35); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   §6 ABOUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.about__grid {
+  display: grid; grid-template-columns: 1fr;
+  gap: 36px; align-items: center; margin-top: 36px;
+}
+@media (min-width: 680px) { .about__grid { grid-template-columns: 200px 1fr; gap: 56px; } }
+
+.about__photo {
+  width: 200px; height: 200px; border-radius: 50%; overflow: hidden;
+  background: #0e1812;
+  border: 4px solid rgba(45,138,84,0.35);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.12), 0 0 0 8px rgba(45,138,84,0.06);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.about__photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.about__name { font-size: clamp(24px, 3.2vw, 36px); font-weight: 900; color: var(--t1); letter-spacing: -0.02em; }
+.about__role { font-size: 14px; color: var(--g-mid); font-weight: 600; margin: 6px 0 24px; }
+.about__body { font-size: clamp(14px, 1.6vw, 16px); color: var(--t2); line-height: 1.92; font-weight: 300; }
+.about__body p + p { margin-top: 16px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   §7 CTA FORM — VIDEO BACKGROUND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.form-section { background: var(--g-dark); position: relative; overflow: hidden; }
+
+/* Background video */
+.form__video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  z-index: 0; opacity: 0.38;
+}
+
+/* Dark overlay — form always readable, video subtly visible */
+.form__video-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(160deg, rgba(18,58,32,0.82) 0%, rgba(14,47,28,0.75) 50%, rgba(10,36,22,0.85) 100%);
+}
+
+.form-section::before {
+  content: ''; position: absolute; top: -30%; left: -10%;
+  width: 60%; height: 160%;
+  background: radial-gradient(ellipse, rgba(75,171,110,0.10) 0%, transparent 65%);
+  pointer-events: none; z-index: 2;
+}
+
+.form-section__inner {
+  position: relative; z-index: 3;
+  display: grid; grid-template-columns: 1fr;
+  gap: 44px; align-items: center;
+}
+@media (min-width: 760px) { .form-section__inner { grid-template-columns: 1fr 1fr; } }
+
+.form-copy__shorshi { margin-top: 28px; }
+.form-copy__shorshi img { width: clamp(90px, 12vw, 150px); opacity: 0.88; }
+
+.form-card { background: #fff; border-radius: 22px; padding: clamp(28px, 4.5vw, 48px); box-shadow: 0 24px 64px rgba(0,0,0,0.32); }
+.form-card__h { font-size: clamp(17px, 2vw, 21px); font-weight: 800; color: var(--t1); margin-bottom: 22px; letter-spacing: -0.01em; }
+.f-group { margin-bottom: 14px; }
+.f-label { display: block; font-size: 13px; font-weight: 600; color: var(--t2); margin-bottom: 6px; }
+.f-input { width: 100%; padding: 12px 15px; border: 1.5px solid #dde8e2; border-radius: 10px; font-family: inherit; font-size: 15px; color: var(--t1); background: var(--bg-w); outline: none; transition: border-color 200ms, box-shadow 200ms; }
+.f-input:focus { border-color: var(--cta); box-shadow: 0 0 0 3px rgba(75,171,110,0.13); }
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.f-submit { width: 100%; background: var(--cta); color: #fff; border: none; border-radius: 50px; cursor: pointer; font-family: inherit; font-size: 17px; font-weight: 800; padding: 16px; margin-top: 8px; letter-spacing: 0.01em; transition: background 200ms, transform 200ms, box-shadow 200ms; box-shadow: 0 4px 18px rgba(75,171,110,0.3); }
+.f-submit:hover { background: var(--cta-h); transform: translateY(-1px); box-shadow: 0 8px 26px rgba(75,171,110,0.42); }
+.f-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+.f-trust { font-size: 12px; color: var(--t3); text-align: center; margin-top: 10px; }
+.f-success { display: none; text-align: center; padding: 24px 10px; }
+.f-success__icon { font-size: 48px; margin-bottom: 12px; }
+.f-success__h { font-size: 20px; font-weight: 800; color: var(--t1); margin-bottom: 10px; }
+.f-success__p { font-size: 15px; color: var(--t2); line-height: 1.65; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FOOTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.footer { background: var(--g-ink); padding: 28px 20px; text-align: center; }
+.footer p { font-size: 12.5px; color: rgba(242,249,244,0.2); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   WHATSAPP FLOAT — CIRCULAR PREMIUM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.wa-float {
+  position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #25d366; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0.35);
+  animation: wa-pulse 3s ease-out infinite;
+  transition: width 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              border-radius 300ms ease,
+              transform 220ms ease,
+              box-shadow 220ms ease;
+  overflow: hidden; white-space: nowrap;
+}
+
+@keyframes wa-pulse {
+  0%   { box-shadow: 0 4px 18px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0.35); }
+  55%  { box-shadow: 0 4px 18px rgba(37,211,102,0.45), 0 0 0 16px rgba(37,211,102,0); }
+  100% { box-shadow: 0 4px 18px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0); }
+}
+
+.wa-float__icon { flex-shrink: 0; transition: transform 220ms ease; }
+
+.wa-float__label {
+  font-size: 14px; font-weight: 700; font-family: inherit;
+  max-width: 0; overflow: hidden; opacity: 0;
+  transition: max-width 280ms ease, opacity 280ms ease, margin 280ms ease;
+  margin: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wa-float:hover {
+    width: 170px; border-radius: 50px;
+    padding: 0 18px 0 14px;
+    box-shadow: 0 8px 28px rgba(37,211,102,0.52);
+    animation: none;
+  }
+  .wa-float:hover .wa-float__label {
+    max-width: 120px; opacity: 1; margin-right: 8px;
+  }
+  .wa-float:hover .wa-float__icon { transform: scale(1.1); }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SCROLL REVEAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.reveal {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 680ms var(--ease-out), transform 680ms var(--ease-out);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+.stagger > * {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+}
+.stagger.in > *:nth-child(1) { opacity:1; transform:none; transition-delay:0ms; }
+.stagger.in > *:nth-child(2) { opacity:1; transform:none; transition-delay:70ms; }
+.stagger.in > *:nth-child(3) { opacity:1; transform:none; transition-delay:140ms; }
+.stagger.in > *:nth-child(4) { opacity:1; transform:none; transition-delay:210ms; }
+.stagger.in > *:nth-child(5) { opacity:1; transform:none; transition-delay:280ms; }
+.stagger.in > *:nth-child(6) { opacity:1; transform:none; transition-delay:350ms; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TASK 1 — REMOVE EYEBROW DASHES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.hero__eyebrow::before,
+.s__eyebrow::before,
+.s--ink .s__eyebrow::before,
+.s--dark .s__eyebrow::before,
+.report-section .s__eyebrow::before,
+.form-section .s__eyebrow::before { display: none; }
+
+.hero__eyebrow,
+.s__eyebrow { gap: 0; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TASK 2 — FORM SECTION READABILITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.form-section .s__title {
+  color: #f2f9f4;
+  text-shadow: 0 3px 18px rgba(0,0,0,.35);
+}
+.form-section .s__sub {
+  color: rgba(242,249,244,.86);
+  font-weight: 400;
+}
+.form-section .s__eyebrow {
+  color: rgba(232,200,125,.9);
+}
+.form-section .s__eyebrow::before { display: none; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TASK 3 — FIXED CTA BUTTON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.cta-sticky {
+  position: fixed;
+  bottom: 28px; left: 32px;
+  z-index: 190;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--g-ink);
+  color: #f2f9f4;
+  font-family: 'Heebo', sans-serif;
+  font-size: 15px; font-weight: 700;
+  padding: 13px 26px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(75,171,110,0.35);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.32), 0 0 0 0 rgba(75,171,110,0.2);
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0; pointer-events: none;
+  transform: translateY(16px);
+  transition: opacity 400ms ease, transform 400ms ease, background 200ms, box-shadow 200ms;
+  backdrop-filter: blur(12px);
+}
+.cta-sticky.visible {
+  opacity: 1; pointer-events: auto; transform: none;
+}
+.cta-sticky:hover {
+  background: var(--g-dark);
+  border-color: rgba(75,171,110,0.7);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.38), 0 0 0 6px rgba(75,171,110,0.08);
+  transform: translateY(-2px);
+}
+.cta-sticky__dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--cta);
+  flex-shrink: 0;
+  animation: ctaDotPulse 2.2s ease-in-out infinite;
+}
+@keyframes ctaDotPulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(0.7); }
+}
+
+@media (max-width: 639px) {
+  .cta-sticky {
+    left: 50%; transform: translateX(-50%) translateY(16px);
+    bottom: 88px;
+    font-size: 14px; padding: 12px 24px;
+    min-width: 220px; justify-content: center;
+  }
+  .cta-sticky.visible { transform: translateX(-50%) translateY(0); }
+  .cta-sticky:hover { transform: translateX(-50%) translateY(-2px); }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TASK 5 — SHORSHI FLOAT ANIMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@keyframes shorshiFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.32)) drop-shadow(0 4px 12px rgba(45,138,84,0.18));
+  }
+  35% {
+    transform: translateY(-9px) scale(1.008);
+    filter: drop-shadow(0 28px 52px rgba(0,0,0,0.26)) drop-shadow(0 8px 20px rgba(45,138,84,0.24));
+  }
+  65% {
+    transform: translateY(-5px) scale(1.004);
+    filter: drop-shadow(0 24px 44px rgba(0,0,0,0.28)) drop-shadow(0 6px 16px rgba(45,138,84,0.20));
+  }
+}
+.hero__shorshi-png img,
+.form-copy__shorshi img,
+.report__note img {
+  animation: shorshiFloat 6s ease-in-out infinite;
+  will-change: transform, filter;
+}
+.form-copy__shorshi img { animation-delay: -2s; }
+.report__note img {
+  animation-delay: -4s;
+  animation-duration: 7s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__shorshi-png img,
+  .form-copy__shorshi img,
+  .report__note img { animation: none; }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TASK 6 — NAV MENU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.nav__links {
+  display: none;
+  list-style: none;
+  flex-direction: row; gap: 6px;
+  align-items: center;
+  margin: 0; padding: 0;
+}
+@media (min-width: 860px) { .nav__links { display: flex; } }
+
+.nav__links a {
+  font-size: 13.5px; font-weight: 500;
+  color: rgba(242,249,244,0.72);
+  padding: 6px 11px; border-radius: 8px;
+  transition: color 180ms, background 180ms;
+  white-space: nowrap;
+}
+.nav__links a:hover {
+  color: #f2f9f4;
+  background: rgba(255,255,255,0.07);
+}
+
+.nav__actions {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.nav__burger {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 5px; width: 40px; height: 40px;
+  background: none; border: none; cursor: pointer; padding: 8px;
+}
+@media (min-width: 860px) { .nav__burger { display: none; } }
+
+.nav__burger span {
+  display: block; width: 20px; height: 1.5px;
+  background: rgba(242,249,244,0.85);
+  border-radius: 2px;
+  transition: transform 280ms ease, opacity 200ms ease;
+  transform-origin: center;
+}
+.nav__burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav__burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav__burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.nav__mobile {
+  display: none;
+  flex-direction: column;
+  background: rgba(6,15,9,0.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 12px 0 20px;
+}
+.nav__mobile.open { display: flex; }
+.nav__mobile ul { list-style: none; margin: 0; padding: 0; }
+.nav__mobile a {
+  display: block;
+  font-size: 16px; font-weight: 500;
+  color: rgba(242,249,244,0.82);
+  padding: 13px clamp(20px, 5vw, 48px);
+  transition: color 150ms, background 150ms;
+}
+.nav__mobile a:hover,
+.nav__mobile a:active {
+  color: #f2f9f4;
+  background: rgba(255,255,255,0.04);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TASK 7 — FOUNDER SECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.founder-section { background: var(--g-ink); }
+
+.founder__layout {
+  display: grid; grid-template-columns: 1fr;
+  gap: 48px; align-items: start;
+}
+@media (min-width: 720px) {
+  .founder__layout { grid-template-columns: 180px 1fr; gap: 64px; }
+}
+
+.founder__meta {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 14px; padding-top: 8px;
+}
+.founder__photo {
+  width: 160px; height: 160px; border-radius: 50%; overflow: hidden;
+  background: #0e1812;
+  border: 3px solid rgba(45,138,84,0.3);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 6px rgba(45,138,84,0.06);
+  flex-shrink: 0;
+}
+.founder__photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.founder__sig {
+  font-size: 13px; font-weight: 600;
+  color: rgba(242,249,244,0.55);
+  text-align: center; letter-spacing: 0.04em;
+}
+
+.founder__letter { max-width: 640px; }
+.founder__letter .s__title { color: #f2f9f4; margin-bottom: 28px; }
+.founder__letter .s__sub { color: rgba(242,249,244,0.65); margin-bottom: 36px; }
+
+.founder__text {
+  display: flex; flex-direction: column; gap: 0;
+}
+.founder__para {
+  font-size: clamp(15px, 1.6vw, 17px);
+  color: rgba(242,249,244,0.78);
+  line-height: 1.9;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.founder__para:last-child { border-bottom: none; }
+.founder__para--accent {
+  font-size: clamp(17px, 2vw, 20px);
+  font-weight: 600;
+  color: rgba(242,249,244,0.92);
+  font-family: 'Heebo', sans-serif;
+  letter-spacing: -0.01em;
+  line-height: 1.7;
+  border-bottom: none;
+  padding-top: 28px;
+}
+.founder__quote {
+  margin: 24px 0 28px;
+  padding: 20px 24px;
+  border-right: 3px solid var(--accent);
+  background: rgba(232,200,125,0.05);
+  border-radius: 0 12px 12px 0;
+  font-size: clamp(16px, 1.8vw, 18px);
+  font-style: italic;
+  color: rgba(242,249,244,0.88);
+  line-height: 1.8;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TASK 8 — ABOUT STATS CARDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 28px;
+}
+@media (min-width: 480px) { .about__stats { grid-template-columns: repeat(4, 1fr); } }
+
+.about__stat {
+  background: var(--bg-a);
+  border: 1.5px solid var(--g-light);
+  border-radius: 14px;
+  padding: 16px 12px;
+  text-align: center;
+  transition: border-color 220ms, box-shadow 220ms;
+}
+.about__stat:hover {
+  border-color: rgba(45,138,84,0.3);
+  box-shadow: 0 4px 18px rgba(45,138,84,0.07);
+}
+.about__stat__val {
+  font-family: 'Heebo', sans-serif;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 900;
+  color: var(--g-dark);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.about__stat__lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3);
+  margin-top: 5px;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TASK 9 — TRUST STRIP (QA CONVERSION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.trust-strip {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 8px 20px;
+  margin-top: 20px;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 500;
+  color: rgba(242,249,244,0.72);
+}
+.trust-item svg { flex-shrink: 0; }
+
+  </style>
+</head>
+<body>
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     PREMIUM INTRO OVERLAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div id="intro-overlay" role="presentation" aria-hidden="true">
+  <canvas id="intro-canvas"></canvas>
+  <div class="intro-glow" id="intro-glow"></div>
+  <div class="intro-content" id="intro-content">
+    <div class="intro-shorshi-wrap" id="intro-shorshi">
+      <div class="intro-leaf-glow" id="intro-leaf"></div>
+      <img src="shorshi/shorshi-wave.png" alt="" draggable="false" />
+    </div>
+    <div class="intro-logo-card" id="intro-logo">
+      <img src="Brand/logo-transparent.png" alt="שורשים" draggable="false" />
+    </div>
+  </div>
+</div>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     NAV
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<nav class="nav" id="main-nav">
+  <div class="nav__inner">
+    <a href="#" class="nav__logo" aria-label="שורשים">
+      <img src="Brand/logo-transparent.png" alt="שורשים" />
+    </a>
+
+    <ul class="nav__links" role="list">
+      <li><a href="#about">מי אנחנו</a></li>
+      <li><a href="#why">למה שורשים</a></li>
+      <li><a href="#recommendations">המלצות</a></li>
+      <li><a href="#report">דוח להורים</a></li>
+      <li><a href="#form">יצירת קשר</a></li>
+    </ul>
+
+    <div class="nav__actions">
+      <a href="#form" class="btn-nav">קבעו שיחת היכרות</a>
+      <button class="nav__burger" id="nav-burger" aria-label="פתח תפריט" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="nav__mobile" id="nav-mobile" role="navigation" aria-label="תפריט נייד">
+    <ul role="list">
+      <li><a href="#about">מי אנחנו</a></li>
+      <li><a href="#why">למה שורשים</a></li>
+      <li><a href="#recommendations">המלצות</a></li>
+      <li><a href="#report">דוח להורים</a></li>
+      <li><a href="#form">יצירת קשר</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     §1 HERO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="hero" id="hero">
+  <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="shorshi/shorshi-wave.png">
+    <source src="hero-bg.mp4?v=3" type="video/mp4" />
+  </video>
+  <div class="hero__overlay" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">שורשים · קהילת הצמיחה לתלמידים</p>
+      <h1 class="hero__headline">
+        <span class="hl-line">מה אם הבעיה</span>
+        <span class="hl-line">היא לא הילד</span>
+        <span class="hl-line"><mark>אלא הסביבה?</mark></span>
+      </h1>
+      <p class="hero__sub">
+        שורשים היא קהילה לתלמידים בכיתות ז׳–י״ב שמפתחת ביטחון עצמי, אחריות והתמדה דרך למידה, קבוצה ושייכות.
+      </p>
+      <div class="hero__actions">
+        <a href="#form" class="btn-primary">קבעו שיחת היכרות ללא עלות</a>
+        <p class="hero__note">ללא תשלום · ללא התחייבות</p>
+      </div>
+    </div>
+
+    <div class="hero__shorshi-stage" id="hero-shorshi-stage">
+      <model-viewer
+        id="hero-shorshi"
+        src="shorshi/shorshi3d.glb"
+        alt="שורשי"
+        loading="lazy"
+        disable-zoom disable-pan disable-tap
+        auto-rotate auto-rotate-delay="800"
+        rotation-per-second="4deg"
+        camera-orbit="0deg 82deg 2.4m"
+        min-camera-orbit="auto auto auto"
+        max-camera-orbit="auto auto auto"
+        shadow-intensity="0" exposure="1.1"
+        environment-image="neutral"
+        style="display:none;" aria-hidden="true"
+      ></model-viewer>
+      <div class="hero__shorshi-png" id="hero-shorshi-png">
+        <img src="shorshi/shorshi-wave.png" alt="" aria-hidden="true" loading="eager" />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     §2 PARENT IDENTIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="s s--alt" id="identify">
+  <div class="container">
+    <p class="s__eyebrow">מה הורים מספרים לנו</p>
+    <h2 class="s__title reveal">אולי אתם מזהים את הילד שלכם</h2>
+    <div class="id-grid stagger">
+      <div class="id-card">הוא חכם, אבל לא מאמין בעצמו.</div>
+      <div class="id-card">היא מפחדת לטעות מול אחרים.</div>
+      <div class="id-card">הוא ויתר על עצמו קצת מוקדם מדי.</div>
+      <div class="id-card">היא יודעת הרבה יותר ממה שהיא מראה.</div>
+      <div class="id-card">הוא שקט ונבלע בתוך הכיתה.</div>
+      <div class="id-card">היא צריכה מישהו שיזכיר לה שהיא מסוגלת.</div>
+    </div>
+    <p class="id-close reveal">אם לפחות אחד מהמשפטים האלה הרגיש מוכר, אתם לא לבד.</p>
+  </div>
+</section>
+
+
+<!-- ─── Organic divider: light → white ─── -->
+<div class="s-divider" style="background:var(--bg-a);" aria-hidden="true">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,36 C240,12 480,60 720,38 C960,16 1200,52 1440,30 L1440,72 L0,72 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     §3 JOURNEY TIMELINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="s" id="why">
+  <div class="container">
+    <p class="s__eyebrow">המסלול שלנו</p>
+    <h2 class="s__title reveal">המסלול שהתלמיד עובר בשורשים</h2>
+    <p class="s__sub reveal" style="transition-delay:50ms;">תהליך אישי שמוביל לביטחון עצמי, אחריות, התמדה ותחושת מסוגלות.</p>
+
+    <div class="journey__wrap">
+
+      <!-- Subtle SVG background motif -->
+      <div class="journey__bg" aria-hidden="true">
+        <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M400 580 C400 580 400 480 400 400 C400 320 360 280 300 220 C240 160 200 100 220 40" stroke="#2d8a54" stroke-width="2"/>
+          <path d="M400 400 C400 400 440 360 480 320 C520 280 560 240 540 180" stroke="#2d8a54" stroke-width="1.5"/>
+          <path d="M400 480 C400 480 350 450 310 420 C270 390 230 380 210 340" stroke="#2d8a54" stroke-width="1"/>
+          <path d="M400 340 C400 340 450 310 490 280 C530 250 570 200 560 150" stroke="#2d8a54" stroke-width="1"/>
+          <path d="M300 220 C300 220 260 200 230 170 C200 140 180 100 200 60" stroke="#2d8a54" stroke-width="0.8"/>
+          <path d="M480 320 C480 320 510 290 530 260 C550 230 560 190 545 150" stroke="#2d8a54" stroke-width="0.6"/>
+          <circle cx="400" cy="580" r="5" fill="#2d8a54"/>
+          <circle cx="300" cy="220" r="3.5" fill="#2d8a54"/>
+          <circle cx="480" cy="320" r="3" fill="#2d8a54"/>
+          <circle cx="400" cy="400" r="3" fill="#2d8a54"/>
+        </svg>
+      </div>
+
+      <div class="journey__inner">
+
+        <!-- SVG organic wave connector — desktop only -->
+        <div class="journey__connector-row" id="journey-connector" aria-hidden="true">
+          <svg viewBox="0 0 1000 54" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="jpath"
+                  d="M 95,27 C 148,8 202,46 265,27 C 328,8 382,46 495,27 C 608,8 662,46 725,27 C 788,8 842,46 905,27"
+                  fill="none" stroke="#2d8a54" stroke-width="2" stroke-opacity="0.45"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="95"  cy="27" r="5.5" fill="#2d8a54" fill-opacity="0.55"/>
+            <circle cx="295" cy="27" r="5.5" fill="#2d8a54" fill-opacity="0.55"/>
+            <circle cx="495" cy="27" r="5.5" fill="#2d8a54" fill-opacity="0.55"/>
+            <circle cx="705" cy="27" r="5.5" fill="#2d8a54" fill-opacity="0.55"/>
+            <circle cx="905" cy="27" r="7"   fill="#2d8a54" fill-opacity="0.8"/>
+          </svg>
+        </div>
+
+        <div class="journey__stops">
+
+          <div class="journey__stop reveal">
+            <div class="journey__num" aria-hidden="true">01</div>
+            <h3 class="journey__title">היכרות ואבחון</h3>
+            <p class="journey__intro">כל תלמיד מגיע עם סיפור אחר.</p>
+            <ul class="journey__points">
+              <li>היכרות עם המשפחה</li>
+              <li>זיהוי חוזקות ואתגרים</li>
+              <li>בניית מטרות אישיות</li>
+            </ul>
+          </div>
+
+          <div class="journey__stop reveal" style="transition-delay:80ms;">
+            <div class="journey__num" aria-hidden="true">02</div>
+            <h3 class="journey__title">שייכות וביטחון</h3>
+            <p class="journey__intro">צמיחה מתחילה כשמרגישים שייכים.</p>
+            <ul class="journey__points">
+              <li>קבוצות קטנות</li>
+              <li>יחס אישי</li>
+              <li>חוויות הצלחה ראשונות</li>
+            </ul>
+          </div>
+
+          <div class="journey__stop reveal" style="transition-delay:160ms;">
+            <div class="journey__num" aria-hidden="true">03</div>
+            <h3 class="journey__title">צמיחה והתמדה</h3>
+            <p class="journey__intro">ביטחון נבנה דרך עשייה עקבית.</p>
+            <ul class="journey__points">
+              <li>מעקב רציף</li>
+              <li>הצבת יעדים</li>
+              <li>בניית הרגלים חיוביים</li>
+            </ul>
+          </div>
+
+          <div class="journey__stop reveal" style="transition-delay:240ms;">
+            <div class="journey__num" aria-hidden="true">04</div>
+            <h3 class="journey__title">מעורבות ההורים</h3>
+            <p class="journey__intro">אתם נשארים חלק מהדרך.</p>
+            <ul class="journey__points">
+              <li>קשר אישי עם המשפחה</li>
+              <li>דוחות התקדמות חודשיים</li>
+              <li>שקיפות מלאה</li>
+            </ul>
+          </div>
+
+          <div class="journey__stop journey__stop--goal reveal" style="transition-delay:320ms;">
+            <div class="journey__num" aria-hidden="true">05</div>
+            <h3 class="journey__title">ילד ש<span class="journey__goal-mark">מאמין בעצמו</span></h3>
+            <p class="journey__intro">זו נקודת ההתחלה החדשה שלו.</p>
+            <ul class="journey__points">
+              <li>ביטחון עצמי גבוה יותר</li>
+              <li>תחושת מסוגלות</li>
+              <li>יכולת להתמודד עם אתגרים</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Emotional breath -->
+        <div class="journey__breath reveal" style="transition-delay:40ms;">
+          <p class="journey__breath__text">
+            התלמיד כבר לא רק לומד.<br>
+            הוא מתחיל <em>להאמין בעצמו.</em>
+          </p>
+        </div>
+
+        <!-- Benefits — 4 groups -->
+        <div class="journey__benefits reveal" style="transition-delay:60ms;">
+          <p class="journey__benefits__label">מה מקבלים לאורך כל הדרך</p>
+          <div class="journey__benefits__groups">
+            <div class="journey__bgroup">
+              <div class="journey__bgroup__name">קהילה</div>
+              <div class="journey__bgroup__items">
+                <div class="journey__bgroup__item">קבוצות קטנות</div>
+                <div class="journey__bgroup__item">תחושת שייכות</div>
+              </div>
+            </div>
+            <div class="journey__bgroup">
+              <div class="journey__bgroup__name">ליווי</div>
+              <div class="journey__bgroup__items">
+                <div class="journey__bgroup__item">יחס אישי</div>
+                <div class="journey__bgroup__item">מעקב רציף</div>
+              </div>
+            </div>
+            <div class="journey__bgroup">
+              <div class="journey__bgroup__name">משפחה</div>
+              <div class="journey__bgroup__items">
+                <div class="journey__bgroup__item">דוחות חודשיים</div>
+                <div class="journey__bgroup__item">שקיפות מלאה</div>
+              </div>
+            </div>
+            <div class="journey__bgroup">
+              <div class="journey__bgroup__name">צמיחה</div>
+              <div class="journey__bgroup__items">
+                <div class="journey__bgroup__item">ביטחון עצמי</div>
+                <div class="journey__bgroup__item">בניית הרגלים</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Closing statement -->
+        <div class="journey__closing reveal" style="transition-delay:40ms;">
+          <p class="journey__closing__l1">אנחנו לא מודדים רק כמה התלמיד יודע.</p>
+          <p class="journey__closing__l2">אנחנו מודדים כמה הוא <mark>מאמין בעצמו.</mark></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Organic divider: white → dark ink ─── -->
+<div class="s-divider" style="background:#ffffff;" aria-hidden="true">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,28 C120,8 280,55 480,32 C640,14 800,58 1000,36 C1140,22 1300,50 1440,24 L1440,72 L0,72 Z" fill="#0a1710"/>
+  </svg>
+</div>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     §4 PARENT REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="report-section" id="report">
+  <video class="report__video" autoplay muted loop playsinline preload="auto">
+    <source src="report-bg.mp4?v=3" type="video/mp4" />
+  </video>
+  <div class="report__video-overlay" aria-hidden="true"></div>
+  <div class="container">
+    <div class="report__layout">
+      <div class="report__stage reveal">
+        <div class="report__glow" aria-hidden="true"></div>
+        <img class="report__mockup" src="reports/parent-report-example.png"
+             alt="דוח התקדמות חודשי — שורשים" loading="lazy" />
+      </div>
+      <div class="report__copy reveal" style="transition-delay:80ms;">
+        <p class="s__eyebrow">שקיפות מלאה</p>
+        <h2 class="s__title">אתם לא<br>צריכים לנחש.</h2>
+        <p class="s__sub">כל הורה מקבל דוח התקדמות חודשי. לא ציון. תמונת מצב שמשתנה ומספרת סיפור.</p>
+        <div class="report__metrics">
+          <div class="metric"><div class="metric__val">84%</div><div class="metric__lbl">ביטחון עצמי</div><div class="metric__arrow">↗</div></div>
+          <div class="metric"><div class="metric__val">78%</div><div class="metric__lbl">שייכות</div><div class="metric__arrow">↗</div></div>
+          <div class="metric"><div class="metric__val">86%</div><div class="metric__lbl">אחריות</div><div class="metric__arrow">↗</div></div>
+          <div class="metric"><div class="metric__val">81%</div><div class="metric__lbl">התמדה</div><div class="metric__arrow">↗</div></div>
+          <div class="metric"><div class="metric__val">88%</div><div class="metric__lbl">השפעה חיובית</div><div class="metric__arrow">↗</div></div>
+        </div>
+        <div class="report__note">
+          <img src="shorshi/shorshi-thinking.png" alt="" aria-hidden="true" loading="lazy" />
+          <p>שורשי עוקב אחרי ההתפתחות של כל תלמיד ועוזר לצוות לראות את התמונה המלאה.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Organic divider: dark ink → light alt ─── -->
+<div class="s-divider" style="background:#0a1710;" aria-hidden="true">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,48 C200,18 400,66 640,42 C840,20 1060,62 1280,40 C1340,34 1400,46 1440,38 L1440,72 L0,72 Z" fill="#f4f9f6"/>
+  </svg>
+</div>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     §5 TESTIMONIALS — CAROUSEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="s s--alt" id="recommendations">
+  <div class="container">
+    <p class="s__eyebrow">מה אומרים עלינו</p>
+    <h2 class="s__title reveal">הורים ותלמידים מספרים</h2>
+    <p class="s__sub reveal" style="transition-delay:40ms; font-weight:500; color:var(--t1);">הודעות אמיתיות שקיבלנו מהורים ותלמידים לאורך הדרך.</p>
+  </div>
+
+  <div class="recs-wrap container">
+    <div class="recs-carousel reveal" id="recs-carousel" style="transition-delay:80ms;">
+      <div class="recs-slide"><img src="testimonials/rec-01.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-02.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-03.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-04.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-05.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-06.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-07.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-08.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-09.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-10.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+      <div class="recs-slide"><img src="testimonials/rec-11.jpg" alt="המלצה אמיתית" loading="lazy" /></div>
+    </div>
+    <div class="recs-nav">
+      <button class="recs-nav-btn" id="recs-prev" aria-label="הקודמת">&#8250;</button>
+      <div class="recs-dots" id="recs-dots" role="tablist"></div>
+      <button class="recs-nav-btn" id="recs-next" aria-label="הבאה">&#8249;</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Organic divider: light alt → white ─── -->
+<div class="s-divider" style="background:var(--bg-a);" aria-hidden="true">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,42 C180,16 360,62 600,38 C800,18 1000,58 1200,34 C1300,22 1380,48 1440,32 L1440,72 L0,72 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     §6 ABOUT LIDOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="s" id="about">
+  <div class="container">
+    <p class="s__eyebrow">מי אנחנו</p>
+    <h2 class="s__title reveal">נעים להכיר</h2>
+    <div class="about__grid reveal" style="transition-delay:60ms;">
+      <div>
+        <div class="about__photo">
+          <img src="Brand/lidor-main.png" alt="לידור גבאי" loading="lazy" />
+        </div>
+      </div>
+      <div>
+        <h3 class="about__name">לידור גבאי</h3>
+        <p class="about__role">מייסד שורשים · מלווה תלמידים</p>
+        <div class="about__body">
+          <p>בוגר תואר במתמטיקה ומדעי המחשב מאוניברסיטת אריאל.</p>
+          <p>מלווה תלמידים באופן אישי ובקבוצות — עם דגש על ביטחון עצמי, אחריות, ורצף לימודי.</p>
+          <p>הקמתי את שורשים מתוך אמונה שכל ילד צריך מקום שמאמין בו, עוד לפני שהוא מאמין בעצמו.</p>
+        </div>
+        <div class="about__stats reveal" style="transition-delay:120ms;">
+          <div class="about__stat">
+            <div class="about__stat__val">5+</div>
+            <div class="about__stat__lbl">שנות ניסיון בחינוך</div>
+          </div>
+          <div class="about__stat">
+            <div class="about__stat__val">80+</div>
+            <div class="about__stat__lbl">תלמידים ליוויתי</div>
+          </div>
+          <div class="about__stat">
+            <div class="about__stat__val">ז׳–י״ב</div>
+            <div class="about__stat__lbl">כיתות שמלוות</div>
+          </div>
+          <div class="about__stat">
+            <div class="about__stat__val">B.Sc</div>
+            <div class="about__stat__lbl">מתמטיקה ומדעי המחשב</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Organic divider: white → dark ink ─── -->
+<div class="s-divider" style="background:#ffffff;" aria-hidden="true">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,32 C160,62 360,12 600,48 C780,76 980,16 1180,46 C1280,58 1370,28 1440,44 L1440,72 L0,72 Z" fill="#0a1710"/>
+  </svg>
+</div>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     §7 FOUNDER STORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="s founder-section" id="founder">
+  <div class="container">
+    <div class="founder__layout">
+
+      <div class="founder__meta reveal">
+        <div class="founder__photo">
+          <img src="Brand/lidor-main.png" alt="לידור גבאי" loading="lazy" />
+        </div>
+        <p class="founder__sig">לידור גבאי<br>מייסד שורשים</p>
+      </div>
+
+      <div class="founder__letter">
+        <p class="s__eyebrow">מאחורי שורשים</p>
+        <h2 class="s__title reveal">למה בכלל הקמתי<br>את שורשים?</h2>
+        <p class="s__sub reveal" style="transition-delay:50ms;">הסיפור שמאחורי הקהילה.</p>
+
+        <div class="founder__text reveal" style="transition-delay:100ms;">
+
+          <p class="founder__para">
+            חזרתי לקריית שמונה אחרי שסיימתי את התואר באריאל.
+            חזרתי עם חלומות. עם תוכניות. עם אמונה שאפשר לבנות כאן משהו גדול.
+          </p>
+
+          <p class="founder__para">
+            אבל חודש אחד אחרי — המציאות השתנתה.
+            אני ואשתי נאלצנו להתפנות מהעיר לטבריה.
+          </p>
+
+          <p class="founder__para">
+            בתוך כל הכאוס, מצאתי את עצמי מלמד ילדים מפונים מכל קו העימות.
+            ילדים שאיבדו שגרה. ילדים שאיבדו ביטחון.
+            ילדים שהמלחמה עצרה להם את הרצף.
+            לא יכולתי להישאר אדיש.
+          </p>
+
+          <p class="founder__para">
+            באותה תקופה נולדו גם הבנות שלי.
+          </p>
+
+          <blockquote class="founder__quote">
+            ופתאום הבנתי בצורה הכי ברורה שיש —
+            העתיד של הצפון מתחיל בילדים שלנו.
+          </blockquote>
+
+          <p class="founder__para">
+            חזרנו לקריית שמונה.
+            לא כי היה קל — כי זה הבית.
+            כי הערכים שקיבלתי כילד נולדו כאן.
+            כי אני מאמין שלכל ילד מגיע מישהו שיאמין בו
+            גם כשהוא עדיין לא מאמין בעצמו.
+          </p>
+
+          <p class="founder__para--accent">
+            שורשים הוא לא רק מרכז למידה.<br>
+            זו המחויבות שלי לדור הבא של ילדי הצפון.
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Organic divider: dark ink → dark green ─── -->
+<div class="s-divider" style="background:#0a1710;" aria-hidden="true">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,44 C220,16 460,66 700,40 C900,18 1100,58 1300,34 C1360,26 1410,46 1440,38 L1440,72 L0,72 Z" fill="#1e5230"/>
+  </svg>
+</div>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     §8 CTA FORM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section class="s form-section" id="form">
+  <video class="form__video" autoplay muted loop playsinline preload="auto">
+    <source src="cta-bg.mp4?v=3" type="video/mp4" />
+  </video>
+  <div class="form__video-overlay" aria-hidden="true"></div>
+  <div class="container">
+    <div class="form-section__inner">
+      <div class="form-copy">
+        <p class="s__eyebrow">בואו נדבר</p>
+        <h2 class="s__title reveal">בואו נבדוק יחד<br>אם שורשים<br>מתאימה לילד שלכם</h2>
+        <p class="s__sub reveal" style="transition-delay:60ms;">שיחת היכרות קצרה. ללא עלות וללא התחייבות. נבין יחד מה הילד שלכם צריך.</p>
+        <div class="trust-strip reveal" style="transition-delay:100ms;">
+          <span class="trust-item">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 1l2.39 6.26H19l-5.39 3.92 2.06 6.35L10 13.77l-5.67 3.76 2.06-6.35L1 7.26h6.61z" fill="rgba(232,200,125,0.85)"/></svg>
+            ללא עלות
+          </span>
+          <span class="trust-item">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 1l2.39 6.26H19l-5.39 3.92 2.06 6.35L10 13.77l-5.67 3.76 2.06-6.35L1 7.26h6.61z" fill="rgba(232,200,125,0.85)"/></svg>
+            ללא התחייבות
+          </span>
+          <span class="trust-item">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 1l2.39 6.26H19l-5.39 3.92 2.06 6.35L10 13.77l-5.67 3.76 2.06-6.35L1 7.26h6.61z" fill="rgba(232,200,125,0.85)"/></svg>
+            תגובה תוך 24 שעות
+          </span>
+        </div>
+        <div class="form-copy__shorshi reveal" style="transition-delay:120ms;">
+          <img src="shorshi/shorshi-thinking.png" alt="" aria-hidden="true" loading="lazy" />
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:80ms;">
+        <div class="form-card">
+          <p class="form-card__h" id="form-title">שלחו פרטים ונחזור אליכם</p>
+          <form id="contact-form" novalidate>
+            <div class="f-group">
+              <label class="f-label" for="f-parent">שם ההורה</label>
+              <input class="f-input" type="text" id="f-parent" name="parentName" placeholder="שם מלא" required autocomplete="name" />
+            </div>
+            <div class="f-group">
+              <label class="f-label" for="f-phone">טלפון</label>
+              <input class="f-input" type="tel" id="f-phone" name="phone" placeholder="050-000-0000" required autocomplete="tel" />
+            </div>
+            <div class="f-row">
+              <div class="f-group">
+                <label class="f-label" for="f-child">שם הילד/ה</label>
+                <input class="f-input" type="text" id="f-child" name="childName" placeholder="שם" required />
+              </div>
+              <div class="f-group">
+                <label class="f-label" for="f-grade">כיתה</label>
+                <input class="f-input" type="text" id="f-grade" name="grade" placeholder='ז׳ – י״ב' required />
+              </div>
+            </div>
+            <button type="submit" class="f-submit" id="f-btn">אני רוצה שיחת היכרות</button>
+            <p class="f-trust">השארת הפרטים אינה כרוכה בתשלום או בהתחייבות.</p>
+          </form>
+          <div class="f-success" id="f-success">
+            <div class="f-success__icon">✅</div>
+            <h3 class="f-success__h">קיבלנו!</h3>
+            <p class="f-success__p">ניצור איתכם קשר בקרוב לתיאום שיחת ההיכרות.<br>תודה שפניתם אלינו.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     FIXED STICKY CTA (TASK 3)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<a href="#form" class="cta-sticky" id="cta-sticky" aria-label="קבעו שיחת היכרות">
+  <span class="cta-sticky__dot" aria-hidden="true"></span>
+  קבעו שיחת היכרות
+</a>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2025 שורשים · כל הזכויות שמורות · <a href="https://wa.me/972544864131?text=%D7%94%D7%99%20%D7%9C%D7%99%D7%93%D7%95%D7%A8%2C%20%D7%A0%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%95%D7%93%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A9%D7%95%D7%A8%D7%A9%D7%99%D7%9D%21" style="color:rgba(242,249,244,0.3);">054-486-4131</a></p>
+</footer>
+
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/972544864131?text=%D7%94%D7%99%20%D7%9C%D7%99%D7%93%D7%95%D7%A8%2C%20%D7%A0%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%95%D7%93%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%A9%D7%95%D7%A8%D7%A9%D7%99%D7%9D%21" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="דברו איתנו בוואטסאפ">
+  <svg class="wa-float__icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+  <span class="wa-float__label">דברו איתנו</span>
+</a>
+
+
+<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     SCRIPTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+
+<script>
+function ready(fn) {
+  if (document.readyState !== 'loading') fn();
+  else document.addEventListener('DOMContentLoaded', fn);
+}
+
+/* INTRO OVERLAY */
+ready(() => {
+  const overlay = document.getElementById('intro-overlay');
+  if (sessionStorage.getItem('shorashim_intro_seen')) {
+    overlay.classList.add('skip');
+    document.body.style.overflow = '';
+    return;
+  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    overlay.classList.add('skip');
+    document.body.style.overflow = '';
+    sessionStorage.setItem('shorashim_intro_seen', '1');
+    return;
+  }
+  document.body.style.overflow = 'hidden';
+  const canvas = document.getElementById('intro-canvas');
+  const ctx    = canvas.getContext('2d');
+  let rafId    = null;
+  let particles = [];
+  function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resizeCanvas();
+  class Particle {
+    constructor() { this.reset(true); }
+    reset(init = false) {
+      this.x = Math.random() * canvas.width;
+      this.y = init ? Math.random() * canvas.height : canvas.height + 10;
+      this.r = Math.random() * 2.2 + 0.6;
+      this.vy = -(Math.random() * 0.5 + 0.2);
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.a = 0;
+      this.ta = Math.random() * 0.55 + 0.15;
+      this.hue = Math.random() > 0.75 ? 55 : 138;
+    }
+    update() { this.x += this.vx; this.y += this.vy; this.a = Math.min(this.a + 0.008, this.ta); if (this.y < -10) this.reset(); }
+    draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fillStyle = 'hsla(' + this.hue + ', 70%, 65%, ' + this.a + ')'; ctx.fill(); }
+  }
+  for (let i = 0; i < 38; i++) particles.push(new Particle());
+  let particlesActive = false;
+  function animateParticles() {
+    if (!particlesActive) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    rafId = requestAnimationFrame(animateParticles);
+  }
+  function runIntro() {
+    if (typeof gsap === 'undefined') { setTimeout(runIntro, 50); return; }
+    const tl = gsap.timeline({ onComplete: dismissIntro, defaults: { ease: 'power3.out' } });
+    tl
+      .fromTo('#intro-glow',    { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7 },       0.0)
+      .fromTo('#intro-leaf',    { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4 },       0.25)
+      .fromTo('#intro-shorshi', { opacity: 0, y: 22 },      { opacity: 1, y: 0, duration: 0.6 },           0.35)
+      .fromTo('#intro-logo',    { opacity: 0, scale: 0.86, y: 8 }, { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: 'power2.out' }, 0.70)
+      .call(() => { gsap.to('#intro-canvas', { opacity: 1, duration: 0.4 }); particlesActive = true; animateParticles(); }, [], 0.90)
+      .to('#intro-overlay', { y: '-102%', duration: 0.55, ease: 'power2.inOut' }, 1.65);
+  }
+  function dismissIntro() {
+    particlesActive = false; cancelAnimationFrame(rafId);
+    sessionStorage.setItem('shorashim_intro_seen', '1');
+    document.body.style.overflow = '';
+    setTimeout(() => { overlay.remove(); }, 100);
+  }
+  runIntro();
+});
+
+/* NAV SCROLL */
+ready(() => {
+  const nav = document.getElementById('main-nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+});
+
+/* HERO 3D vs PNG */
+ready(() => {
+  const mv    = document.getElementById('hero-shorshi');
+  const png   = document.getElementById('hero-shorshi-png');
+  const video = document.querySelector('.hero__video');
+  const isMobile = window.matchMedia('(max-width: 719px)').matches || ('ontouchstart' in window && window.innerWidth < 900);
+  const hasWebGL = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl')); } catch { return false; } })();
+  if (!isMobile && hasWebGL) {
+    if (!document.getElementById('kf-float3d')) {
+      const s = document.createElement('style'); s.id = 'kf-float3d';
+      s.textContent = '@keyframes float3d { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }';
+      document.head.appendChild(s);
+    }
+    const startLoad = () => {
+      mv.style.cssText = 'display:block; opacity:0; position:absolute; inset:0; pointer-events:none;';
+      mv.addEventListener('load', () => {
+        mv.style.position = ''; mv.style.inset = ''; mv.style.pointerEvents = '';
+        mv.style.animation = 'float3d 5s ease-in-out infinite';
+        mv.style.transition = 'opacity 500ms ease';
+        requestAnimationFrame(() => { mv.style.opacity = '1'; });
+        png.style.transition = 'opacity 500ms ease'; png.style.opacity = '0';
+        setTimeout(() => { png.style.display = 'none'; }, 550);
+      }, { once: true });
+      mv.addEventListener('error', () => { mv.style.display = 'none'; }, { once: true });
+    };
+    if (video) { if (!video.paused) { startLoad(); } else { video.addEventListener('playing', startLoad, { once: true }); } }
+    else { setTimeout(startLoad, 600); }
+  }
+});
+
+/* TESTIMONIALS CAROUSEL */
+ready(() => {
+  const carousel = document.getElementById('recs-carousel');
+  if (!carousel) return;
+  const slides   = Array.from(carousel.querySelectorAll('.recs-slide'));
+  const dotsEl   = document.getElementById('recs-dots');
+  const prevBtn  = document.getElementById('recs-prev');
+  const nextBtn  = document.getElementById('recs-next');
+  let currentIdx = 0, autoTimer = null, isScrolling = false;
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'recs-dot'; dot.setAttribute('role', 'tab'); dot.setAttribute('aria-label', 'המלצה ' + (i + 1));
+    dot.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); });
+    dotsEl.appendChild(dot);
+  });
+  function updateDots() { dotsEl.querySelectorAll('.recs-dot').forEach((d, i) => d.classList.toggle('active', i === currentIdx)); }
+  function goTo(idx) {
+    currentIdx = ((idx % slides.length) + slides.length) % slides.length;
+    const slide = slides[currentIdx];
+    const target = slide.offsetLeft - (carousel.offsetWidth - slide.offsetWidth) / 2;
+    carousel.scrollTo({ left: Math.max(0, Math.min(target, carousel.scrollWidth - carousel.offsetWidth)), behavior: 'smooth' });
+    updateDots();
+  }
+  function startAuto() { stopAuto(); autoTimer = setInterval(() => { goTo(currentIdx + 1); }, 3800); }
+  function stopAuto() { clearInterval(autoTimer); }
+  prevBtn?.addEventListener('click', () => { stopAuto(); goTo(currentIdx - 1); startAuto(); });
+  nextBtn?.addEventListener('click', () => { stopAuto(); goTo(currentIdx + 1); startAuto(); });
+  carousel.addEventListener('mouseenter', stopAuto);
+  carousel.addEventListener('mouseleave', startAuto);
+  carousel.addEventListener('scroll', () => {
+    if (isScrolling) return;
+    const center = carousel.scrollLeft + carousel.offsetWidth / 2;
+    let closest = 0, minDist = Infinity;
+    slides.forEach((s, i) => { const dist = Math.abs(s.offsetLeft + s.offsetWidth / 2 - center); if (dist < minDist) { minDist = dist; closest = i; } });
+    if (closest !== currentIdx) { currentIdx = closest; updateDots(); }
+  }, { passive: true });
+  updateDots();
+  const visObs = new IntersectionObserver(entries => { entries.forEach(e => e.isIntersecting ? startAuto() : stopAuto()); }, { threshold: 0.3 });
+  visObs.observe(carousel);
+});
+
+/* SCROLL REVEAL */
+ready(() => {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06, rootMargin: '0px 0px -24px 0px' });
+  document.querySelectorAll('.reveal, .stagger').forEach(el => obs.observe(el));
+});
+
+/* JOURNEY PATH DRAW ON SCROLL */
+ready(() => {
+  const connector = document.getElementById('journey-connector');
+  if (!connector) return;
+  const pathObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { connector.classList.add('path-drawn'); pathObs.unobserve(connector); } });
+  }, { threshold: 0.5 });
+  pathObs.observe(connector);
+});
+
+/* CONTACT FORM */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypg6x3y4heHFLDWVygB9FnIb0VZzlnG7Se2YTaNCXoySnJSCHfyf7C0kfkRbPgPKpCEw/exec';
+ready(() => {
+  const form   = document.getElementById('contact-form');
+  const btn    = document.getElementById('f-btn');
+  const succ   = document.getElementById('f-success');
+  const ftitle = document.getElementById('form-title');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const parent = form.parentName.value.trim();
+    const phone  = form.phone.value.trim();
+    const child  = form.childName.value.trim();
+    const grade  = form.grade.value.trim();
+    if (!parent || !phone || !child || !grade) { alert('אנא מלאו את כל השדות.'); return; }
+    btn.textContent = 'שולח...'; btn.disabled = true;
+    const deviceType = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+    const waLink = 'https://wa.me/972' + phone.replace(/[^0-9]/g, '').replace(/^0/, '');
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ts: new Date().toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' }), parent, phone, child, grade, source: 'Website', campaign: new URLSearchParams(window.location.search).get('utm_campaign') || '', pageUrl: window.location.href, deviceType, status: 'New', notes: '', waLink })
+      });
+      form.style.display = 'none'; ftitle.style.display = 'none'; succ.style.display = 'block';
+    } catch {
+      btn.textContent = 'אני רוצה שיחת היכרות'; btn.disabled = false;
+      alert('שגיאה. נסו שוב או פנו אלינו בוואטסאפ.');
+    }
+  });
+});
+
+/* STICKY CTA VISIBILITY */
+ready(() => {
+  const stickyBtn = document.getElementById('cta-sticky');
+  const hero = document.getElementById('hero');
+  if (!stickyBtn || !hero) return;
+  const heroObs = new IntersectionObserver(([entry]) => stickyBtn.classList.toggle('visible', !entry.isIntersecting), { threshold: 0.2 });
+  heroObs.observe(hero);
+});
+
+/* HAMBURGER MENU */
+ready(() => {
+  const burger    = document.getElementById('nav-burger');
+  const mobileNav = document.getElementById('nav-mobile');
+  if (!burger || !mobileNav) return;
+  burger.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', String(isOpen));
+    burger.setAttribute('aria-label', isOpen ? 'סגור תפריט' : 'פתח תפריט');
+  });
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('open'); burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.setAttribute('aria-label', 'פתח תפריט');
+    });
+  });
+});
+
+/* VIDEO DEBUG */
+(function() {
+  const videos = [
+    { el: document.querySelector('.hero__video'),   label: 'Hero' },
+    { el: document.querySelector('.report__video'), label: 'Report' },
+    { el: document.querySelector('.form__video'),   label: 'CTA' },
+  ];
+  videos.forEach(function(v) {
+    if (!v.el) { console.warn('[VIDEO] ' + v.label + ': element not found'); return; }
+    v.el.addEventListener('loadedmetadata', function() { console.log('[VIDEO] ' + v.label + ': loadedmetadata ✓ (' + v.el.videoWidth + '×' + v.el.videoHeight + ')'); });
+    v.el.addEventListener('canplay',        function() { console.log('[VIDEO] ' + v.label + ': canplay ✓'); });
+    v.el.addEventListener('playing',        function() { console.log('[VIDEO] ' + v.label + ': playing ✓'); });
+    v.el.addEventListener('error',          function() { console.error('[VIDEO] ' + v.label + ': error ✗', v.el.error); });
+    v.el.addEventListener('stalled',        function() { console.warn('[VIDEO] ' + v.label + ': stalled'); });
+    v.el.addEventListener('waiting',        function() { console.warn('[VIDEO] ' + v.label + ': waiting (buffering)'); });
+  });
+})();
+</script>
+</body>
+</html>
