@@ -2050,7 +2050,7 @@ ready(() => {
   const png   = document.getElementById('hero-shorshi-png');
   const video = document.querySelector('.hero__video');
   const isMobile = window.matchMedia('(max-width: 719px)').matches || ('ontouchstart' in window && window.innerWidth < 900);
-  const hasWebGL = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl')); } catch { return false; } })();
+  const hasWebGL = false; /* PNG used in hero — 3D model orientation fix pending */
   if (!isMobile && hasWebGL) {
     if (!document.getElementById('kf-float3d')) {
       const s = document.createElement('style'); s.id = 'kf-float3d';
